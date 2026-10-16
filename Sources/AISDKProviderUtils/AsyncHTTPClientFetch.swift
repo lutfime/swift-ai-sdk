@@ -51,7 +51,7 @@ func asyncHTTPClientFetch() -> FetchFunction {
             let task = Task {
                 do {
                     for try await buffer in response.body {
-                        continuation.yield(Data(buffer: buffer))
+                        continuation.yield(Data(buffer.readableBytesView))
                     }
                     continuation.finish()
                 } catch {
