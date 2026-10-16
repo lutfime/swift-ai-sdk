@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// Default timeout interval for API calls.
 ///
@@ -25,14 +28,16 @@ func defaultFetchFunction() -> FetchFunction {
     { request in
         let session = URLSession.shared
 
-        if #available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *) {
-            let (bytes, response) = try await session.bytes(for: request)
-            let stream = makeDataStream(from: bytes)
-            return FetchResponse(body: .stream(stream), urlResponse: response)
-        } else {
+#if os(Linux)
+        do {
             let (data, response) = try await session.data(for: request)
             return FetchResponse(body: .data(data), urlResponse: response)
         }
+#else
+            let (bytes, response) = try await session.bytes(for: request)
+            let stream = makeDataStream(from: bytes)
+            return FetchResponse(body: .stream(stream), urlResponse: response)
+#endif
     }
 }
 
@@ -79,6 +84,7 @@ func fetchWithAbortCheck(
     }
 }
 
+#if !os(Linux) // dead on Linux — the data fallback branch runs instead
 @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 private func makeDataStream(from bytes: URLSession.AsyncBytes) -> AsyncThrowingStream<Data, Error> {
     AsyncThrowingStream { continuation in
@@ -111,3 +117,4 @@ private func makeDataStream(from bytes: URLSession.AsyncBytes) -> AsyncThrowingS
         }
     }
 }
+#endif

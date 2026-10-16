@@ -276,7 +276,7 @@ public extension StreamObjectResult where PartialValue == [String: JSONValue] {
                                 let decoded = try decoder.decode(Partial.self, from: data)
                                 continuation.yield(decoded)
                             } catch {
-                                fputs("streamObject partial decode error: \(error)\n", stderr)
+                                FileHandle.standardError.write(Data("streamObject partial decode error: \(error)\n".utf8))
                                 continue
                             }
                         }

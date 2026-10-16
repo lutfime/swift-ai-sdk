@@ -1,3 +1,7 @@
+#if os(Linux)
+// MCP transports are excluded on Linux: SSE streaming is
+// URLSession.bytes-based (Apple-only) and unused by this server.
+#else
 import Foundation
 import AISDKProvider
 
@@ -279,3 +283,4 @@ public struct OAuthErrorResponse: Codable, Sendable, Equatable {
         case errorUri = "error_uri"
     }
 }
+#endif

@@ -1,6 +1,9 @@
 import Foundation
 import AISDKProvider
 import AISDKProviderUtils
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 private struct OpenAIImageModelCore: Sendable {
     private let modelIdentifier: OpenAIImageModelId

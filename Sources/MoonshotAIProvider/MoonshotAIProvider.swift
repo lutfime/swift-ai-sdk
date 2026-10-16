@@ -2,6 +2,9 @@ import AISDKProvider
 import AISDKProviderUtils
 import Foundation
 import OpenAICompatibleProvider
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 private let defaultMoonshotAIBaseURL = "https://api.moonshot.ai/v1"
 

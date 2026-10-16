@@ -69,7 +69,7 @@ func embedTelemetryJSONString(from rawValue: Any?) -> String {
     }
 
     if let number = value as? NSNumber {
-        if CFGetTypeID(number) == CFBooleanGetTypeID() {
+        if String(cString: number.objCType) == "c" || String(cString: number.objCType) == "B" {
             return number.boolValue ? "true" : "false"
         }
         return normalizeNumberString(number.doubleValue)

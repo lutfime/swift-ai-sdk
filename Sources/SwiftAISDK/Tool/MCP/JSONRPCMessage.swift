@@ -1,3 +1,7 @@
+#if os(Linux)
+// MCP transports are excluded on Linux: SSE streaming is
+// URLSession.bytes-based (Apple-only) and unused by this server.
+#else
 /**
  JSON-RPC 2.0 message types for Model Context Protocol.
 
@@ -198,3 +202,4 @@ public enum JSONRPCMessage: Codable, Sendable {
         }
     }
 }
+#endif

@@ -2,6 +2,9 @@ import Foundation
 import AISDKProvider
 import AISDKProviderUtils
 import EventSourceParser
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// Minimal Swift port of Vercel AI Gateway language model for CLI usage.
 /// Supports basic text generation and streaming for manual testing purposes.

@@ -1,3 +1,7 @@
+#if os(Linux)
+// MCP transports are excluded on Linux: SSE streaming is
+// URLSession.bytes-based (Apple-only) and unused by this server.
+#else
 /**
  Transport interface for MCP (Model Context Protocol) communication.
 
@@ -116,3 +120,4 @@ public func createMcpTransport(config: MCPTransportConfig) throws -> MCPTranspor
 public func isCustomMcpTransport(_ value: Any) -> Bool {
     return value is MCPTransport
 }
+#endif

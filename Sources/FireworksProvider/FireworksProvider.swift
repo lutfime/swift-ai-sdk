@@ -2,6 +2,9 @@ import Foundation
 import AISDKProvider
 import AISDKProviderUtils
 import OpenAICompatibleProvider
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 //===----------------------------------------------------------------------===//
 //=== Upstream Reference ====================================================//

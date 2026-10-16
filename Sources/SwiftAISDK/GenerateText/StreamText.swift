@@ -1514,7 +1514,7 @@ public func streamText<OutputValue: Sendable, PartialOutputValue: Sendable>(
     )
 
     let errorHandler: StreamTextOnError = onError ?? { error in
-        fputs("streamText error: \(error)\n", stderr)
+        FileHandle.standardError.write(Data("streamText error: \(error)\n".utf8))
     }
 
     let result = DefaultStreamTextResult<OutputValue, PartialOutputValue>(

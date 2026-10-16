@@ -134,7 +134,7 @@ public func jsonValue(from value: Any) throws -> JSONValue {
     if let number = value as? NSNumber {
         // Detect actual JSON booleans using CFBoolean type check
         // JSONSerialization returns __NSCFBoolean for true/false, __NSCFNumber for numbers
-        if CFGetTypeID(number as CFTypeRef) == CFBooleanGetTypeID() {
+        if String(cString: (number as NSNumber).objCType) == "c" || String(cString: (number as NSNumber).objCType) == "B" {
             return .bool(number.boolValue)
         }
         return .number(number.doubleValue)

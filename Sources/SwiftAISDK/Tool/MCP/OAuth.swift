@@ -1,6 +1,16 @@
+#if os(Linux)
+// MCP transports are excluded on Linux: SSE streaming is
+// URLSession.bytes-based (Apple-only) and unused by this server.
+#else
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
-import Security
+#else
+import Crypto
+#endif
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /**
  OAuth support for MCP transports.
@@ -357,7 +367,7 @@ private func base64URLEncode(_ data: Data) -> String {
 
 private func pkceChallenge() -> (codeVerifier: String, codeChallenge: String) {
     var bytes = [UInt8](repeating: 0, count: 32)
-    _ = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
+        for i in bytes.indices { bytes[i] = UInt8.random(in: .min ... .max) }
     let verifier = base64URLEncode(Data(bytes))
 
     let digest = SHA256.hash(data: Data(verifier.utf8))
@@ -888,3 +898,4 @@ private func authInternal(
     try await provider.redirectToAuthorization(authorization.authorizationUrl)
     return .redirect
 }
+#endif

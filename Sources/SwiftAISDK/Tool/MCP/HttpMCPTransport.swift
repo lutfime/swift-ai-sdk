@@ -1,3 +1,7 @@
+#if os(Linux)
+// MCP transports are excluded on Linux: SSE streaming is
+// URLSession.bytes-based (Apple-only) and unused by this server.
+#else
 /**
  HTTP MCP transport implementing the Streamable HTTP style.
 
@@ -9,6 +13,9 @@ import Foundation
 import AISDKProvider
 import AISDKProviderUtils
 import EventSourceParser
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
 public final class HttpMCPTransport: MCPTransport, @unchecked Sendable {
@@ -566,3 +573,4 @@ public final class HttpMCPTransport: MCPTransport, @unchecked Sendable {
         }
     }
 }
+#endif

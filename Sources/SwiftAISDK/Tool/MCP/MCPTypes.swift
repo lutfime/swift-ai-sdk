@@ -1,3 +1,7 @@
+#if os(Linux)
+// MCP transports are excluded on Linux: SSE streaming is
+// URLSession.bytes-based (Apple-only) and unused by this server.
+#else
 /**
  Model Context Protocol (MCP) type definitions.
 
@@ -771,3 +775,4 @@ public enum CallToolResult: Codable, Sendable {
         }
     }
 }
+#endif

@@ -90,7 +90,13 @@ private func defaultManualRedirectFetchFunction() -> FetchFunction {
             delegateQueue: nil
         )
 
-        if #available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *) {
+#if os(Linux)
+        do {
+            defer { session.finishTasksAndInvalidate() }
+            let (data, response) = try await session.data(for: request)
+            return FetchResponse(body: .data(data), urlResponse: response)
+        }
+#else
             let (bytes, response) = try await session.bytes(for: request)
             let stream = makeManualRedirectDataStream(
                 from: bytes,
@@ -98,14 +104,11 @@ private func defaultManualRedirectFetchFunction() -> FetchFunction {
                 delegate: delegate
             )
             return FetchResponse(body: .stream(stream), urlResponse: response)
-        } else {
-            defer { session.finishTasksAndInvalidate() }
-            let (data, response) = try await session.data(for: request)
-            return FetchResponse(body: .data(data), urlResponse: response)
-        }
+#endif
     }
 }
 
+#if !os(Linux) // dead on Linux — the data fallback branch runs instead
 @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 private func makeManualRedirectDataStream(
     from bytes: URLSession.AsyncBytes,
@@ -144,3 +147,4 @@ private func makeManualRedirectDataStream(
         }
     }
 }
+#endif

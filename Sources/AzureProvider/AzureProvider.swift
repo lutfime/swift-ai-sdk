@@ -2,6 +2,9 @@ import Foundation
 import AISDKProvider
 import AISDKProviderUtils
 import OpenAIProvider
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// Settings for configuring the Azure OpenAI provider.
 /// Mirrors `packages/azure/src/azure-openai-provider.ts`.

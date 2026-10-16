@@ -2,6 +2,9 @@ import Foundation
 import AISDKProvider
 import AISDKProviderUtils
 import OpenAICompatibleProvider
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// Settings for configuring the Baseten provider.
 /// Mirrors `packages/baseten/src/baseten-provider.ts`.

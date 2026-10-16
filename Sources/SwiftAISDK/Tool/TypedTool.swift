@@ -84,7 +84,7 @@ public func tool<Input: Codable & Sendable, Output: Codable & Sendable>(
             } catch {
                 // DX: do not crash the process if tool output decoding fails.
                 // Fall back to returning the raw JSON output to the model and surface the issue via stderr.
-                fputs("tool(toModelOutput): Failed to decode tool output to typed value; falling back to raw JSON. Error: \(error)\n", stderr)
+                FileHandle.standardError.write(Data("tool(toModelOutput): Failed to decode tool output to typed value; falling back to raw JSON. Error: \(error)\n".utf8))
                 return .json(value: json)
             }
         }
@@ -263,7 +263,7 @@ public func dynamicTool<Input: Codable & Sendable, Output: Codable & Sendable>(
             } catch {
                 // DX: do not crash the process if tool output decoding fails.
                 // Fall back to returning the raw JSON output to the model and surface the issue via stderr.
-                fputs("dynamicTool(toModelOutput): Failed to decode tool output to typed value; falling back to raw JSON. Error: \(error)\n", stderr)
+                FileHandle.standardError.write(Data("dynamicTool(toModelOutput): Failed to decode tool output to typed value; falling back to raw JSON. Error: \(error)\n".utf8))
                 return .json(value: json)
             }
         }

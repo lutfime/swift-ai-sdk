@@ -1,3 +1,7 @@
+#if os(Linux)
+// MCP transports are excluded on Linux: SSE streaming is
+// URLSession.bytes-based (Apple-only) and unused by this server.
+#else
 /**
  Mock MCP transport for testing.
  
@@ -375,3 +379,4 @@ private extension ResourceContents {
         }
     }
 }
+#endif

@@ -1,6 +1,9 @@
 import Foundation
 import AISDKProvider
 import AISDKProviderUtils
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// Settings for configuring the Replicate provider.
 /// Mirrors `packages/replicate/src/replicate-provider.ts`.

@@ -6,6 +6,9 @@
 
 import Foundation
 import AISDKProviderUtils
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// Downloads a file from the specified URL.
 ///

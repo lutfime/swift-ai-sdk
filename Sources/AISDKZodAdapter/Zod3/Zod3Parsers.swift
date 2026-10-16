@@ -378,7 +378,7 @@ func parseLiteralDef(_ def: ZodLiteralDef) -> JsonSchemaObject {
             "const": .number(Double(number)),
         ]
     case let number as NSNumber:
-        if CFGetTypeID(number) == CFBooleanGetTypeID() {
+        if String(cString: number.objCType) == "c" || String(cString: number.objCType) == "B" {
             let boolValue = number.boolValue
             return [
                 "type": .string("boolean"),

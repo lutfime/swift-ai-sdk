@@ -1,5 +1,8 @@
 import Foundation
 import AISDKProviderUtils
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public struct OpenAIWebSocketRequest: Sendable, Equatable {
     public let url: URL

@@ -1,5 +1,8 @@
 import Foundation
 import AISDKProvider
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /**
  HTTP POST utilities for API calls.

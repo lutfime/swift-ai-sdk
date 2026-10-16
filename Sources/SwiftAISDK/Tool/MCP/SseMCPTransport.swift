@@ -1,3 +1,7 @@
+#if os(Linux)
+// MCP transports are excluded on Linux: SSE streaming is
+// URLSession.bytes-based (Apple-only) and unused by this server.
+#else
 /**
  Server-Sent Events (SSE) transport implementation for MCP.
 
@@ -12,6 +16,9 @@ import Foundation
 import AISDKProvider
 import AISDKProviderUtils
 import EventSourceParser
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 // MARK: - URL Extensions
 
@@ -465,3 +472,4 @@ public func deserializeMessage(_ line: String) throws -> JSONRPCMessage {
     let decoder = JSONDecoder()
     return try decoder.decode(JSONRPCMessage.self, from: data)
 }
+#endif

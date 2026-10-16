@@ -1,5 +1,4 @@
 import CoreFoundation
-import CoreGraphics
 import Foundation
 
 /**
@@ -137,7 +136,7 @@ private func isJSONNumber(_ value: Any) -> Bool {
          is Float, is Double, is CGFloat, is Decimal:
         return true
     case let number as NSNumber:
-        return CFGetTypeID(number) != CFBooleanGetTypeID()
+        return !(String(cString: number.objCType) == "c" || String(cString: number.objCType) == "B")
     default:
         return false
     }

@@ -39,7 +39,7 @@ public func streamObject<ResultValue, PartialValue, ElementStream>(
     )
 
     let errorHandler: StreamObjectOnErrorCallback = onError ?? { event in
-        fputs("streamObject error: \(event.error)\n", stderr)
+        FileHandle.standardError.write(Data("streamObject error: \(event.error)\n".utf8))
     }
 
     Task {

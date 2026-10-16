@@ -1,3 +1,7 @@
+#if os(Linux)
+// MCP transports are excluded on Linux: SSE streaming is
+// URLSession.bytes-based (Apple-only) and unused by this server.
+#else
 /**
  MCP Client implementation for connecting to MCP servers and invoking tools.
 
@@ -1038,3 +1042,4 @@ private extension JSONValue {
         }
     }
 }
+#endif

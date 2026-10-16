@@ -42,7 +42,7 @@ extension JSONValue {
         case let string as String:
             self = .string(string)
         case let number as NSNumber:
-            if CFGetTypeID(number) == CFBooleanGetTypeID() {
+            if String(cString: number.objCType) == "c" || String(cString: number.objCType) == "B" {
                 self = .bool(number.boolValue)
             } else {
                 self = .number(number.doubleValue)

@@ -199,7 +199,7 @@ private func numberJSONValue(from value: Any) -> JSONValue? {
     }
 
     if let number = value as? NSNumber {
-        if CFGetTypeID(number as CFTypeRef) == CFBooleanGetTypeID() {
+        if String(cString: (number as NSNumber).objCType) == "c" || String(cString: (number as NSNumber).objCType) == "B" {
             return .bool(number.boolValue)
         }
 

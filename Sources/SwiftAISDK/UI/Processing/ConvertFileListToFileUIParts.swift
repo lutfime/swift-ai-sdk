@@ -1,6 +1,6 @@
 import Foundation
-import UniformTypeIdentifiers
 
+#if canImport(UniformTypeIdentifiers)
 /**
  Converts file URLs into `FileUIPart` values.
 
@@ -63,3 +63,4 @@ private struct FileListConversionError: LocalizedError {
 
     var errorDescription: String? { message }
 }
+#endif

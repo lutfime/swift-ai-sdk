@@ -2,6 +2,9 @@ import Foundation
 import AISDKProvider
 import AISDKProviderUtils
 import OpenAICompatibleProvider
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// Settings for configuring the DeepSeek provider.
 /// Mirrors `packages/deepseek/src/deepseek-provider.ts`.

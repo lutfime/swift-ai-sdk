@@ -1,6 +1,9 @@
 import Foundation
 import AISDKProvider
 import AISDKProviderUtils
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public struct OpenAIRealtimeModelConfig: Sendable {
     public let provider: String
