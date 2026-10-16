@@ -1,6 +1,8 @@
 import Foundation
 
 #if canImport(UniformTypeIdentifiers)
+import UniformTypeIdentifiers
+
 /**
  Converts file URLs into `FileUIPart` values.
 
