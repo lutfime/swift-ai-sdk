@@ -58,7 +58,9 @@ let package = Package(
         .executable(name: "playground", targets: ["SwiftAISDKPlayground"]) 
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0")
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
+        .package(url: "https://github.com/swift-server/async-http-client", from: "1.20.0"),
+        .package(url: "https://github.com/apple/swift-nio", from: "2.80.0")
     ],
     targets: [
         // EventSourceParser - SSE parsing (internal utility)
@@ -74,7 +76,11 @@ let package = Package(
         // HTTP, JSON, schema, validation, retry, headers, ID generation, tools
         .target(
             name: "AISDKProviderUtils",
-            dependencies: ["AISDKProvider", "AISDKZodAdapter", "EventSourceParser"]
+            dependencies: [
+                "AISDKProvider", "AISDKZodAdapter", "EventSourceParser",
+                .product(name: "AsyncHTTPClient", package: "async-http-client"),
+                .product(name: "NIOCore", package: "swift-nio")
+            ]
         ),
         .testTarget(name: "AISDKProviderUtilsTests", dependencies: ["AISDKProviderUtils", "AISDKZodAdapter"]),
 
