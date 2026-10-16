@@ -26,17 +26,21 @@ public typealias FetchFunction = @Sendable (URLRequest) async throws -> FetchRes
 /// Creates the default fetch implementation backed by `URLSession`.
 func defaultFetchFunction() -> FetchFunction {
     { request in
+#if os(Linux)
+        // Linux: AsyncHTTPClient (SwiftNIO) — non-blocking event-loop
+        // I/O; corelibs URLSession is thread-per-request over libcurl.
+        return try await asyncHTTPClientFetch()(request)
+#else
         let session = URLSession.shared
 
-#if os(Linux)
-        do {
-            let (data, response) = try await session.data(for: request)
-            return FetchResponse(body: .data(data), urlResponse: response)
-        }
-#else
+        if #available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *) {
             let (bytes, response) = try await session.bytes(for: request)
             let stream = makeDataStream(from: bytes)
             return FetchResponse(body: .stream(stream), urlResponse: response)
+        } else {
+            let (data, response) = try await session.data(for: request)
+            return FetchResponse(body: .data(data), urlResponse: response)
+        }
 #endif
     }
 }
