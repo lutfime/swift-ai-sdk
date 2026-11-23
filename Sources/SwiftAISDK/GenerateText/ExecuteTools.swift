@@ -15,27 +15,29 @@ func executeTools(
         return []
     }
 
-    return try await withThrowingTaskGroup(of: ToolOutput?.self) { group in
-        for toolCall in toolCalls {
-            group.addTask {
-                await executeToolCall(
-                    toolCall: toolCall,
-                    tools: tools,
-                    tracer: tracer,
-                    telemetry: telemetry,
-                    messages: messages,
-                    abortSignal: abortSignal,
-                    experimentalContext: experimentalContext
-                )
-            }
+    // SEQUENTIAL (iFaraid, ticket #236 — the lead's ruling): a step's tool
+    // calls run ONE AT A TIME in the model's call order, and the results
+    // return in that same order. The previous task group ran the calls
+    // concurrently and collected them in COMPLETION order, which inverted
+    // order-sensitive tools (scratch-world builders: a layer must exist
+    // before the heirs declared on it) and handed the model the results
+    // shuffled. On error the loop stops immediately — later calls never
+    // run (previously they had already started and ran to completion).
+    // Scope: the generateText path only; StreamTextActor is untouched.
+    // Proven by iFaraid's FaraidAssistant order test (worktree run).
+    var outputs: [ToolOutput] = []
+    for toolCall in toolCalls {
+        if let output = try await executeToolCall(
+            toolCall: toolCall,
+            tools: tools,
+            tracer: tracer,
+            telemetry: telemetry,
+            messages: messages,
+            abortSignal: abortSignal,
+            experimentalContext: experimentalContext
+        ) {
+            outputs.append(output)
         }
-
-        var outputs: [ToolOutput] = []
-        for try await output in group {
-            if let output {
-                outputs.append(output)
-            }
-        }
-        return outputs
     }
+    return outputs
 }
